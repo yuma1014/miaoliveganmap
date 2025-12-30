@@ -2,9 +2,19 @@
 <html lang="zh-TW">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
     <title>蔬旅苗栗 | 探索山城純淨食光</title>
     
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="default">
+    <meta name="apple-mobile-web-app-title" content="蔬旅苗栗">
+    <meta name="theme-color" content="#F7F3EB">
+
+    <link rel="apple-touch-icon" href="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA1MTIgNTEyIiBzdHlsZT0iYmFja2dyb3VuZDojN0U5RTdEIj48dGV4dCB4PSI1MCUiIHk9IjUwJSIgZG9taW5hbnQtYmFzZWxpbmU9Im1pZGRsZSIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZmlsbD0id2hpdGUiIGZvbnQtc2l6ZT0iMjU2cHgiIGZvbnQtZmFtaWx5PSJzYW5zLXNlcmlmIiBmb250LXdlaWdodD0iYm9sZCI+6蔬PC90ZXh0Pjwvc3ZnPg==">
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA1MTIgNTEyIiBzdHlsZT0iYmFja2dyb3VuZDojN0U5RTdEIj48dGV4dCB4PSI1MCUiIHk9IjUwJSIgZG9taW5hbnQtYmFzZWxpbmU9Im1pZGRsZSIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZmlsbD0id2hpdGUiIGZvbnQtc2l6ZT0iMjU2cHgiIGZvbnQtZmFtaWx5PSJzYW5zLXNlcmlmIiBmb250LXdlaWdodD0iYm9sZCI+6蔬PC90ZXh0Pjwvc3ZnPg==">
+
+    <link rel="manifest" href='data:application/manifest+json;base64,eyJuYW1lIjoi6蔬5peF6IuX5qCXIiwiZHZXNjcmlwdGlvbiI6IuaOoueoouaxlzXln47ntJTdeS6n+mjnyIsInN0YXJ0X3VybCI6Ii4iLCJkaXNwbGF5Ijoic3RhbmRhbG9uZSIsImJhY2tncm91bmRfY29sb3IiOiIjRjdGM0VCIiwidGhlbWVfY29sb3IiOiIjRjdGM0VCIiwiaWNvbnMiOlt7InNyYyI6ImRhdGE6aW1hZ2Uvc3ZnK3htbDtiYXNlNjQsUEhOMmJ6eHRiRzV6UFNJaWFIUjBjRG92TDIzZDNkeTV4T1M1dmNtY3ZNakF3TUM5emRtY2lJSFpwWlhkQmMzZzlJakF3SURBMU1USTFNVElpSUhOMGVXeGxQU0JpWVdOclIzSnZkVzVrT2lNM1JUbEZOMFFpUGp4MFpYaDBJHg9IjUwJSIgeT0iNTAlIiBkb21pbmFudC1iYXNlbGluZT0ibWlkZGxlIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBmaWxsPSJ3aGl0ZSIgZm9udC1zaXplPSIyNTZweCIgZm9udC1mYW1pbHk9InNhbnMtc2VyaWYiIGZvbnQtd2VpZ2h0PSJib2xkIj7roKw8L3RleHQ+PC9zdmc+","c2l6ZXMiOiIxOTJ4MTkyIiwiJiYt0eXBlIjoiaW1hZ2Uvc3ZnK3htbCJ9XX0='>
+
     <script>
         window.onerror = function(message, source, lineno, colno, error) {
             const loadingEl = document.getElementById('loading-text');
@@ -44,6 +54,14 @@
         .map-filter { filter: grayscale(0.1) hue-rotate(-10deg) sepia(0.1); }
         .editor-input { background: transparent; border: none; outline: none; width: 100%; }
         .editor-textarea { background: transparent; border: none; outline: none; width: 100%; resize: none; min-height: 300px; }
+        
+        /* 針對 iOS PWA 模式的安全區域調整 */
+        @supports (padding-top: env(safe-area-inset-top)) {
+            nav { padding-top: env(safe-area-inset-top); height: calc(4rem + env(safe-area-inset-top)); }
+            main { padding-top: calc(4rem + env(safe-area-inset-top)); }
+            .fixed-top { top: calc(4rem + env(safe-area-inset-top)); }
+        }
+
         #loading { position: fixed; inset: 0; background: #7E9E7D; display: flex; flex-direction: column; justify-content: center; align-items: center; z-index: 9999; transition: opacity 0.5s; color: white; }
     </style>
 
@@ -63,7 +81,6 @@
     <div id="root"></div>
 
     <script type="text/babel">
-        // 確保函式庫載入
         if (!window.React || !window.ReactDOM || !window.Motion) { throw new Error("React 或 Motion 函式庫載入失敗"); }
 
         const { useState, useEffect, useMemo } = React;
@@ -160,7 +177,7 @@
             };
 
             return (
-                <motion.div layoutId="write-button" initial={{ opacity: 0, scale: 0.9 }} animate={{ opacity: 1, scale: 1 }} exit={{ opacity: 0, scale: 0.9 }} className="fixed inset-0 z-[70] bg-[#F7F3EB] flex flex-col">
+                <motion.div layoutId="write-button" initial={{ opacity: 0, scale: 0.9 }} animate={{ opacity: 1, scale: 1 }} exit={{ opacity: 0, scale: 0.9 }} className="fixed inset-0 z-[70] bg-[#F7F3EB] flex flex-col fixed-top">
                     <div className="flex justify-between items-center px-6 py-4 border-b border-brand-primary/10 bg-white/50 backdrop-blur-md sticky top-0 z-10">
                         <button onClick={onClose} className="p-2 rounded-full hover:bg-black/5 text-brand-text transition-colors"><Icons.X /></button>
                         <div className="text-sm font-bold tracking-widest text-brand-textLight uppercase">New Story</div>
@@ -353,8 +370,8 @@
                 <h1 className="text-4xl md:text-5xl font-serif font-bold text-brand-text mb-4 tracking-widest">蔬旅苗栗</h1>
                 <p className="text-brand-textLight tracking-[0.3em] uppercase mb-12">Miaoli Veg Travel</p>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4 w-full max-w-md">
-                    <button onClick={() => setPage('map')} className="bg-brand-primary text-white py-4 rounded-xl shadow-lg hover:bg-brand-primaryDark transition-all font-bold tracking-wider">開始探索地圖</button>
-                    <button onClick={() => setPage('origin')} className="bg-white text-brand-text border border-brand-primary/20 py-4 rounded-xl shadow-sm hover:bg-brand-bg transition-all font-bold tracking-wider">認識聯大團隊</button>
+                    <button onClick={() => setPage('map')} className="bg-brand-primary text-white py-4 rounded-xl shadow-lg hover:bg-brand-primaryDark transition-all font-bold tracking-wider">開始探索</button>
+                    <button onClick={() => setPage('origin')} className="bg-white text-brand-text border border-brand-primary/20 py-4 rounded-xl shadow-sm hover:bg-brand-bg transition-all font-bold tracking-wider">認識我們</button>
                 </div>
             </motion.div>
         );
@@ -374,7 +391,7 @@
             return (
                 <div className="min-h-screen bg-brand-bg font-sans text-brand-text flex flex-col">
                     <nav className="fixed top-0 left-0 right-0 h-16 bg-brand-bg/95 backdrop-blur z-[60] flex items-center justify-between px-6 border-b border-brand-secondary/20 shadow-sm">
-                        {/* 左上角 Logo 區塊 - 已還原為您指定的樣式 */}
+                        {/* 依照您的圖片還原 Logo 樣式 */}
                         <div className="flex items-center gap-3 cursor-pointer group" onClick={() => handleNav('home')}>
                             <div className="w-2 h-10 bg-brand-primary rounded-full group-hover:scale-y-110 transition-transform duration-300"></div>
                             <div>
